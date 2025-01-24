@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 // Get a single counter by ID with populated merchant field
 router.get("/:id", async (req, res) => {
     try {
-        const counter = await Counter.findById(req.params.id).populate('merchant');
+        const counter = await Counter.findById(req.params.id).populate('merchants');
         if (!counter) {
             return res.status(404).json({ message: "Counter not found" });
         }
@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
 // Update a counter by ID
 router.patch("/:id", async (req, res) => {
     try {
-        const counter = await Counter.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('merchant');
+        const counter = await Counter.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('merchants');
         if (!counter) {
             return res.status(404).json({ error: "Counter not found" });
         }
