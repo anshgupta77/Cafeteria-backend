@@ -3,12 +3,13 @@ const express = require('express');
 const router = express.Router();
 
 const Counter = require("../models/counter.model");
+const Dish = require("../models/dish.model")
 
 // Get all counters with populated merchant field
 router.get("/", async (req, res) => {
     try {
-        const counters = await Counter.find().populate('merchants');
-        res.json(counters);
+        const counters = await Counter.find()
+        res.json({counters: counters});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -84,5 +85,7 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
 
 module.exports = router;

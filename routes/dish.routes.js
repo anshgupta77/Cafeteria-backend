@@ -60,6 +60,18 @@ router.delete("/:id", async (req, res) => {
     }
   });
 
+
+  router.get("/counter/:id", async (req, res) =>{
+      try{
+          const id = req.params.id;
+          const Dishs = await Dish.find();
+          const counterDish = Dishs.filter(dish => dish.counter._id.toString() === id);
+          res.json({counterDish: counterDish});
+      }catch(err){
+          res.status(500).json({ error: error.message });
+      }
+  })
+
   
 module.exports = router;
 
