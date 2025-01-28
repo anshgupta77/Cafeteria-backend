@@ -16,7 +16,8 @@ router.post("/", async (req,res) =>{
     try {
         const dish = new Dish(req.body);
         await dish.save();
-        res.status(201).json(dish);
+        console.log(dish);
+        res.status(201).json({dish : dish});
       } catch (error) {
         res.status(400).json({ error: error.message });
       }

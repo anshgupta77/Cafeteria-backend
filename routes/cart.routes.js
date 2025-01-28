@@ -43,7 +43,10 @@ router.patch('/:id',async (req, res) => {
 
         // Update the quantity
         item.quantity += req.body.changeQuantity;
-
+        if(item.quantity < 1){
+            req.user.cart = req.user.cart.filter(cartItem => cartItem.dish._id.toString() !== req.params.id);
+        }
+        
         // Save the updated user document
         await req.user.save();
 

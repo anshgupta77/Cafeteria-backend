@@ -8,7 +8,7 @@ const Dish = require("../models/dish.model")
 // Get all counters with populated merchant field
 router.get("/", async (req, res) => {
     try {
-        const counters = await Counter.find()
+        const counters = await Counter.find().populate('merchants');
         res.json({counters: counters});
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -54,7 +54,7 @@ router.get("/:id", async (req, res) => {
         if (!counter) {
             return res.status(404).json({ message: "Counter not found" });
         }
-        res.json(counter);
+        res.json({counter: counter});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
