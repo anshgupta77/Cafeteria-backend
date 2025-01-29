@@ -39,10 +39,10 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        console.log(req.url);
+        console.log(req.body);
       const counter = new Counter(req.body);
       await counter.save();
-      res.status(201).json(counter);
+      res.status(201).json({counter: counter});
     } catch (error) {
       res.status(400).json({ error: error.message});
    }
@@ -67,7 +67,7 @@ router.patch("/:id", async (req, res) => {
         if (!counter) {
             return res.status(404).json({ error: "Counter not found" });
         }
-        res.json(counter);
+        res.json({counter: counter});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

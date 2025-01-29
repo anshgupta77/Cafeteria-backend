@@ -5,8 +5,8 @@ const User = require("../models/user.model");
 
 router.get("/", async (req, res) =>{
     try{
-        const user = await User.find().select("username email role");
-        res.json({user: user});
+        const users = await User.find().select("username email role");
+        res.json({users: users});
 
     }catch(err){
         res.status(500).json({message: err.message});
@@ -34,7 +34,7 @@ router.post("/", async (req, res) =>{
     })
     try{
        await newUser.save();
-        res.status(201).json({message: `User created successfully`});
+        res.status(201).json({message: `User created successfully`, user: newUser});
     }catch(err){
         res.status(400).json({message: err.message});
     }
@@ -72,6 +72,19 @@ router.patch("/:id", async (req, res) =>{
         res.status(500).json({message: err.message});
     }
 })
+router.patch("/:id/role", async (req, res) =>{
+    try{
+        const user = await User.findById(req.params.id);
+        if(!user){
+            res.status(404).json({message: `User not found`});
+        }
+        user.role = req.body.role;
+        await user.save();
+        res.json({message: `User updated successfully` , user: user});
+    }catch(err){
+        res.status(500).json({message: err.message});
+    }
+})
 
 router.delete("/:id", async (req, res) =>{
     try{
@@ -80,7 +93,7 @@ router.delete("/:id", async (req, res) =>{
         if(!user){
             res.status(404).json({message: `User not found`});
         }
-        res.json({message: `User deleted successfully`});
+        res.json({message: `User deleted successfully`, user: user} );
     }catch(err){
         res.status(500).json({message: err.message});
     }
