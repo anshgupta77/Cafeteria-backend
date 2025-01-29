@@ -4,7 +4,7 @@ const router = express.Router();
 // const cartController = require('./../controllers/cart.controllers');
 const User = require('../models/user.model');
 
-router.use(auth);
+// router.use(auth);
 
 router.get('/',async(req,res) => {
     try{
@@ -19,6 +19,9 @@ router.get('/',async(req,res) => {
 
 router.post('/',async (req,res) => {
     try{
+
+        console.log(req.body.dish);
+        console.log(req.user);
         req.user.cart.push({dish : req.body.dish , quantity : 1});
         const cart = req.user.cart;
         await req.user.save();
@@ -96,10 +99,10 @@ router.delete('/',async (req,res) =>{
     }
 });
 
-async function auth(req,res,next){
-    const id = "679382c26ff65139eed439d0";
-    req.user = await User.findById(id);
-    next();
-}
+// async function auth(req,res,next){
+//     const id = "6799b9d5f97a13c64ec7b3ca";
+//     req.user = await User.findById(id);
+//     next();
+// }
 
 module.exports = router;

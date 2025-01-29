@@ -24,18 +24,22 @@ const cartSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
     username:{
-        type: String
-
+        type: String,
+        required: true,
     },
     email:{
         type: String,
+        unique: true,
+        required: true,
     }, 
     password:{
         type: String,
+        required: true,
     },
     role:{
         type: String,
         enum: ["customer", "admin", "merchant"],
+        required: true,
     },
     cart: {
         type: [cartSchema],

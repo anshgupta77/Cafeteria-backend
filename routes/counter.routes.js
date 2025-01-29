@@ -42,6 +42,8 @@ router.post("/", async (req, res) => {
         console.log(req.body);
       const counter = new Counter(req.body);
       await counter.save();
+
+      await counter.populate('merchants');
       res.status(201).json({counter: counter});
     } catch (error) {
       res.status(400).json({ error: error.message});
@@ -80,7 +82,10 @@ router.delete("/:id", async (req, res) => {
         if (!counter) {
             return res.status(404).json({ error: "Counter not found" });
         }
-        res.json({ message: "Counter deleted successfully" });
+
+        await Dish.deleteMany({counter: req.params.id});
+        
+        res.json({ message: "Counter deleted successfully" , counter: counter});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
