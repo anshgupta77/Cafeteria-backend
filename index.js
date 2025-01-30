@@ -24,13 +24,28 @@ async function auth(req,res,next){
     console.log(req.user);
     next();
 }
+app.get("/user/userinfo" ,authToken, async (req, res) =>{
+    try{
+        console.log(req.url);
+        const {email} = req.userInfo;
+        // console.log("User info",req.userInfo);
+        const user = await User.findOne({email: email});
+        res.json({user: user});
+    }catch(err){
+        res.status(500).json({message: err.message});
+    }
+})
+
+
 
 
 app.use("/", authRouter);
-app.use("/user", userRouter);
-app.use("/dish", dishRouter);
-app.use("/counter",  counterRouter);
-app.use("/cart", cartRouter);
+app.use("/user", authToken, auth, userRouter);
+app.use("/dish", authToken, auth, dishRouter);
+app.use("/counter", authToken, auth, counterRouter);
+app.use("/cart", authToken, auth, cartRouter);
+
+
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);

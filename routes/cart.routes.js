@@ -10,7 +10,7 @@ router.get('/',async(req,res) => {
     try{
         console.log(req.user);
         const user = await req.user.populate('cart.dish')
-        res.json({"cart" : user.cart});
+        res.json({cart : user.cart});
 
     }catch(err){
         res.status(500).json({message: err.message});
@@ -19,13 +19,11 @@ router.get('/',async(req,res) => {
 
 router.post('/',async (req,res) => {
     try{
-
         console.log(req.body.dish);
         console.log(req.user);
         req.user.cart.push({dish : req.body.dish , quantity : 1});
         const cart = req.user.cart;
         await req.user.save();
-
         await req.user.populate('cart.dish')
         res.json({cart : req.user.cart});
     }catch(err){

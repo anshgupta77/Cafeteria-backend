@@ -36,7 +36,7 @@ router.post("/login", async (req,res) =>{
     console.log(req.url);
     const {email, password} = req.body;
     // console.log(users)
-    const user = await User.findOne({email: email});
+    const user = await User.findOne({email: email}).populate("cart.dish");
     if(!user) {
         return res.status(401).json({message: "Incorrect Email"});
     }

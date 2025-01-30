@@ -12,7 +12,7 @@ function authToken(req, res, next){
             return res.status(500).json({message: err.message});
         }
         // userinfo.iat
-        console.log("auth_token", token_data);
+        // console.log("auth_token", token_data);
         req.userInfo = token_data;
         next();
     })
