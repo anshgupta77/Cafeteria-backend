@@ -27,10 +27,10 @@ async function auth(req,res,next){
 
 
 app.use("/", authRouter);
-app.use("/user",authToken, auth, userRouter);
-app.use("/dish", authToken, auth, dishRouter);
-app.use("/counter", authToken, auth, counterRouter);
-app.use("/cart",authToken, auth, cartRouter);
+app.use("/user", userRouter);
+app.use("/dish", dishRouter);
+app.use("/counter",  counterRouter);
+app.use("/cart", cartRouter);
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
