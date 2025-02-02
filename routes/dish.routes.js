@@ -3,10 +3,9 @@ const router = express.Router();
 
 const Dish = require("../models/dish.model");
 const Counter = require("../models/counter.model");
-router.get("/", async (req, res) => {
+router.get("/", filterDish, async (req, res) => {
     try {
-      const dishes = await Dish.find().populate('counter');
-      res.json(dishes);
+      res.json(req.dishes);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -62,18 +61,23 @@ router.delete("/:id", async (req, res) => {
   });
 
 
-  router.get("/counter/:id", async (req, res) =>{
+  router.get("/counter/:id",filterDish, async (req, res) =>{
       try{
           const id = req.params.id;
-          const Dishs = await Dish.find();
-          const counterDish = Dishs.filter(dish => dish.counter._id.toString() === id);
+          const counterDish = req.dishes.filter(dish => dish.counter._id.toString() == id);
           res.json({counterDish: counterDish});
       }catch(err){
           res.status(500).json({ error: error.message });
       }
   })
 
- 
+
+  async function filterDish(req, res, next){
+    let dishes = await Dish.find().populate('counter');
+    dishes = dishes.filter(dish => dish.inStock);
+    req.dishes = dishes;
+    next();
+  }
 
   
 module.exports = router;

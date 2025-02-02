@@ -21,7 +21,7 @@ app.use(cors());
 async function auth(req,res,next){
     const {email} = req.userInfo;
     req.user = await User.findOne({email: email}).select("username email role cart");
-    console.log(req.user);
+    console.log("req.user",req.user);
     next();
 }
 app.get("/user/userinfo" ,authToken, async (req, res) =>{

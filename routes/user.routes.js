@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user.model");
+const {paginate} = require("./../middleware/pagination");
 
-
-router.get("/", async (req, res) =>{
+router.get("/", filterUser, paginate , async (req, res) =>{
     try{
-        const users = await User.find().select("username email role");
-        res.json({users: users});
+        // const users = await User.find().select("username email role");
+        console.log("Paginated Result",req.paginatedResults);
+        res.json({users: req.paginatedResults.results, totalPages: req.paginatedResults.totalPages});
 
     }catch(err){
         res.status(500).json({message: err.message});
@@ -98,6 +99,18 @@ router.delete("/:id", async (req, res) =>{
         res.status(500).json({message: err.message});
     }
 })
+
+
+async function filterUser(req, res, next){
+    const {role} = req.query;
+    const users = await User.find().select("username email role");
+    var filteredUsers = users;
+    if(role){
+        filteredUsers = filteredUsers.filter(user => user.role === role);
+    }
+    req.paginationResource = filteredUsers;
+    next();
+}
 
 
 module.exports = router;

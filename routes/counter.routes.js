@@ -49,6 +49,22 @@ router.post("/", async (req, res) => {
       res.status(400).json({ error: error.message});
    }
 });
+
+
+router.get("/merchantpanel", async (req, res) =>{
+    console.log(req.url);
+    try{
+        const merchantId = req.user._id;
+        console.log(merchantId); //
+        const counters = await Counter.find({merchants: merchantId}).populate('merchants');
+        res.json({counters: counters});
+    }
+    catch(err){
+        res.status(500).json({message: err.message});
+    }
+})
+
+
 // Get a single counter by ID with populated merchant field
 router.get("/:id", async (req, res) => {
     try {
@@ -90,6 +106,8 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
 
 
 
