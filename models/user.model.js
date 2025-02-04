@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
         default: [],
     }
 })
+userSchema.pre('validate', async function (next) {
+    this.cart = this.cart.filter(item => item.dish);
+    next();
+});
 
 
 module.exports = mongoose.model("User", userSchema, "users");

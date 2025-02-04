@@ -23,6 +23,7 @@ router.post('/',async (req,res) => {
         console.log(req.user);
         req.user.cart.push({dish : req.body.dish , quantity : 1});
         const cart = req.user.cart;
+        // await req.user.validate();
         await req.user.save();
         await req.user.populate('cart.dish')
         res.json({cart : req.user.cart});
@@ -90,7 +91,7 @@ router.delete('/',async (req,res) =>{
     try{
         req.user.cart = [];
         await req.user.save();
-        res.json({"Cart cleared successfully" : req.user.cart});
+        res.json({cart : req.user.cart});
 
     }catch(err){
         res.status(500).json({message: err.message});

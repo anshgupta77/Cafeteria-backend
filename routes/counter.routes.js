@@ -4,9 +4,10 @@ const router = express.Router();
 
 const Counter = require("../models/counter.model");
 const Dish = require("../models/dish.model")
+const {isAdmin} = require("../middleware/permissions");
 
 // Get all counters with populated merchant field
-router.get("/", async (req, res) => {
+router.get("/" ,async (req, res) => {
     try {
         const counters = await Counter.find().populate('merchants');
         res.json({counters: counters});
