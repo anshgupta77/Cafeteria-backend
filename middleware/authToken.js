@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user.model");
 function authToken(req, res, next){
     // console.log(req.headers);
     const authHeader = req.headers["authorization"];
@@ -17,6 +18,14 @@ function authToken(req, res, next){
         next();
     })
 }
+
+async function auth(req,res,next){
+    const {email} = req.userInfo;
+    req.user = await User.findOne({email: email}).select("username email role cart");
+    console.log("req.user",req.user);
+    next();
+}
 module.exports = {
     authToken,
+    auth,
 }

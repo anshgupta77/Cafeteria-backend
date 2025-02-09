@@ -6,6 +6,7 @@ const Counter = require("../models/counter.model");
 const {ROLE} = require("../contraints")
 const {populateCounter} = require("../middleware/counter");
 const {authCounter} = require("../middleware/permissions");
+const { authToken, auth } = require('../middleware/authToken');
 router.get("/",filterDish, async (req, res) => {
     try {
       // const dishes = await Dish.find().populate('counter');
@@ -14,6 +15,21 @@ router.get("/",filterDish, async (req, res) => {
       res.status(500).json({ error: error.message });
     }
 });
+
+router.get("/:id", async (req, res) => {
+  try {
+    const dish = await Dish.findById(req.params.id).populate('counter');
+    if (!dish) {
+      return res.status(404).json({ message: "Dish not found" });
+    }
+    res.json(dish);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.use(authToken);
+router.use(auth);
 
 router.post("/",populateCounter, authCounter, async (req,res) =>{
   const {newDish} = req.body;
@@ -29,17 +45,6 @@ router.post("/",populateCounter, authCounter, async (req,res) =>{
 })
 
 
-router.get("/:id", async (req, res) => {
-    try {
-      const dish = await Dish.findById(req.params.id).populate('counter');
-      if (!dish) {
-        return res.status(404).json({ message: "Dish not found" });
-      }
-      res.json(dish);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-});
 
 
 router.patch("/:id",populateCounter, authCounter, async (req, res) => {
