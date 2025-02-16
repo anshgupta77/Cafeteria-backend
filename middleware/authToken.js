@@ -4,11 +4,13 @@ function authToken(req, res, next){
     // console.log(req.headers);
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
+    console.log("token_data", token);
     if(!token){
         return res.status(500).json({message: "Not authorise"});
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, token_data){
+        // console.log("token_data", token);
         if(err){
             return res.status(500).json({message: err.message});
         }

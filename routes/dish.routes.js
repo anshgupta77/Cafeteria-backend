@@ -84,15 +84,32 @@ router.delete("/:id",populateCounter, authCounter, async (req, res) => {
   })
 
 
+  // async function filterDish(req, res, next){
+  //   const role = req.query.role;
+  //   let dishes = await Dish.find().populate('counter');
+  //   if(role !== ROLE.Merchant){
+  //     dishes = dishes.filter(dish => dish.inStock);
+  //   }
+  //   req.dishes = dishes;
+  //   next();
+  // }
+
   async function filterDish(req, res, next){
-    const role = req.query.role;
-    let dishes = await Dish.find().populate('counter');
+    const {role, search} = req.query;
+    let query = {};
+    if(search){
+      query.$or = [
+        {name: {$regex: search, $options: 'i'}},
+      ]
+    }
+    let dishes = await Dish.find(query).populate('counter');
     if(role !== ROLE.Merchant){
       dishes = dishes.filter(dish => dish.inStock);
     }
     req.dishes = dishes;
     next();
   }
+
 
   
 module.exports = router;
